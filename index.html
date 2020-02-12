@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>NeverLAN Writeup</title>
 
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/reveal.css">
@@ -184,19 +184,102 @@
             </section>
             <section>
 
-                <section id="slide3" data-markdown data-separator="^\n\n\n"><textarea data-template>                                    
+                <section id="slide3-0" data-markdown data-separator="^\n\n\n" data-separator-vertical="^\n\n">
+                    <textarea data-template>                                    
 ## 2. Adobe Payroll
-        
-        
-        
-![challenge description](/rsc/neverlan-10)
-        
-        
-        
-        
-        
-    </textarea>
+            
 
+
+
+![challenge description](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-10.png)
+
+
+
+
+### Adobe_Payroll.7z
+![Adobe payroll](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-26.png)
+        
+        
+        
+
+
+
+### Running the binary
+![](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-30.png)
+
+
+
+
+
+![](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-31.png)
+
+
+
+![](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-33.png)
+
+
+
+
+### [dotPeek](https://www.jetbrains.com/decompiler/)  
+![dotPeek](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-28.png)  
+
+
+
+
+### Decompiling the binary
+![binary](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-8.png)  
+
+
+
+
+### checkUsername(), checkPassword() 
+![binary](https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-9.png)  
+</textarea>
+                </section>
+                <section>
+
+                    <h3>Flag!</h3>
+                    <img src="https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-7.png">
+                    <p class="fragment grow">
+                        flag{.net_is_pretty_easy_to_decompile}
+                    </p>
+
+                </section>
+            </section>
+
+            <section id="slide4-0">
+                <section>
+                    <h2>
+                        3. Browser Bias
+                    </h2>
+                </section>
+                <section>
+                    <img src="https://raw.githubusercontent.com/jeongm-in/neverlan-2020-writeup/master/rsc/neverlan-59.png">
+                </section>
+                <section>
+                    <img src="rsc/neverlan-20.png">
+                </section>
+                <section>
+                    <h2>User Agents</h2>
+                    <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent">MDN web docs</a></p>
+                    <blockquote>
+                        The User-Agent request header is a characteristic string that lets servers and network peers identify the application, operating system, vendor, and/or version of the requesting user agent.
+                    </blockquote>
+                </section>
+                <section>
+                    <img src="rsc/neverlan-19.png">
+                </section>
+                <section>
+                    <img src="rsc/neverlan-21.png">
+                </section>
+                <section>
+                    <a href="https://gist.github.com/dstufft/2502524"> A List of Every User Agent Ever Used To Download a File from PyPI</a>
+                </section>
+                <section>
+                    <img src="rsc/neverlan-22.png">
+                    <p class="fragment grow">
+                        flag{8b1t_w3b}
+                    </p>
                 </section>
             </section>
         </div>
