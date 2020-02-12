@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section id="title-slide">
+                <h2>
+                    NeverLAN CTF 2020 writeup
+                </h2>
+                <h3>
+                    Jeong Min Lim
+                </h3>
+            </section>
+
+            <section id="slide1">
+                <h2>
+                    Reverse Engineering Challenges
+                </h2>
+            </section>
+            <section id="slide2">
+                <section id="slide2-0">
+                    <h2>
+                        1. Reverse Engineer
+                    </h2>
+                </section>
+                <section id="slide2-1">
+                    <img src="rsc/neverlan-1.png" alt="challenge description">
+                </section>
+                <section id="slide2-2">
+                    <img src="rsc/neverlan-2.png" alt="file command">
+                    <img class="fragment" src="rsc/neverlan-3.png" alt="just run it">
+                </section>
+
+
+
+                <section id="slide2-3">
+                    <img src="rsc/neverlan-5.png">
+                </section>
+                <section id="slide2-4">
+                    <img src="rsc/neverlan-6.png">
+                </section>
+
+                <section id="slide2-5" data-transition="zoom">
+                    <p><a href=https://gist.github.com/jeongm-in/d4f5033d0ab551c061bdd98da3691453#file-notable-stuff-md>objdump -d revseng</a>
+                    </p>
+                    <ol>
+                        <li>
+                            <p>main</p>
+                        </li>
+                        <li>
+                            <p>foo</p>
+                        </li>
+                        <li class="fragment grow">
+                            <p>print</p>
+                        </li>
+                    </ol>
+
+                </section>
+
+                <section id="slide2-6">
+                    <p>print</p>
+                    <pre>
+                    movb $0x66,-0x1(%rbp)
+                    movb $0x6c,-0x2(%rbp)
+                    movb $0x61,-0x3(%rbp)
+                    movb $0x67,-0x4(%rbp)
+                    movb $0x7b,-0x5(%rbp)
+                    movb $0x7d,-0x6(%rbp)                    
+                    </pre>
+                </section>
+
+                <section id="slide2-7">
+                    <p>print</p>
+                    <pre>
+                        movb <strong>f</strong>,-0x1(%rbp)
+                        movb <strong>l</strong>,-0x2(%rbp)
+                        movb <strong>a</strong>,-0x3(%rbp)
+                        movb <strong>g</strong>,-0x4(%rbp)
+                        movb <strong>{</strong>,-0x5(%rbp)
+                        movb <strong>}</strong>,-0x6(%rbp)                        
+                    </pre>
+                </section>
+                <section id="slide2-8">
+                    <p>print (continued)</p>
+                    <pre>
+                    mov    $0x15,%edi
+                    callq  1040 &lt;malloc@plt&gt;
+                    mov    %rax,-0x10(%rbp)
+                    mov    -0x10(%rbp),%rax
+                    movb   $0x77,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x1,%rax
+                    movb   $0x33,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x2,%rax
+                    movb   $0x63,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x3,%rax
+                    movb   $0x6f,(%rax)
+                            ...
+                    </pre>
+                </section>
+                <section id="slide2-9">
+                    <p>print (continued)</p>
+                    <pre>
+                    mov    $0x15,%edi
+                    callq  1040 &lt;malloc@plt&gt;
+                    mov    %rax,-0x10(%rbp)
+                    mov    -0x10(%rbp),%rax
+                    movb   <strong>w</strong>,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x1,%rax
+                    movb   <strong>3</strong>,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x2,%rax
+                    movb   <strong>c</strong>,(%rax)
+                    mov    -0x10(%rbp),%rax
+                    add    $0x3,%rax
+                    movb   <strong>o</strong>,(%rax)
+                            ...
+                    </pre>
+                </section>
+
+                <section id="slide2-10">
+                    <p>How to bypass the foo() call?</p>
+                    <img src="rsc/neverlan-11.png">
+                </section>
+                <section id="slide2-11">
+                    <p>Look for variables</p>
+                    <img src="rsc/neverlan-12.png">
+                </section>
+                <section id="slide2-12">
+                    <img src="rsc/neverlan-13.png">
+                    <img class="fragment" src="rsc/neverlan-15.png">
+                    <img class="fragment" src="rsc/neverlan-14.png">
+                </section>
+                <section id="slide2-13">
+                    <p>main()</p>
+                    <pre>
+                        if x > 0:
+                            foo() // segfault
+                        else:
+                            print() // prints the flag
+                    </pre>
+                    <img class="fragment" src="rsc/neverlan-16.png">
+                </section>
+                <section id="slide2-14">
+                    <img src="rsc/neverlan-17.png">
+                    <p>
+                        flag{w3con7r01th3b1nari3s}
+                    </p>
+                </section>
+                <section id="slide2-15">
+                    <p>Call the function directly</p>
+                    <img class="fragment" src="rsc/neverlan-18.png">
+                </section>
+
+            </section>
+
+            <section id="slide3">
+                <h2>
+                    SQL Injection
+                </h2>
+                <section id="slide3-1">
+
+                </section>
+
+            </section>
+        </div>
+    </div>
+
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            hash: true,
+            dependencies: [{
+                src: 'plugin/markdown/marked.js'
+            }, {
+                src: 'plugin/markdown/markdown.js'
+            }, {
+                src: 'plugin/highlight/highlight.js'
+            }, {
+                src: 'plugin/notes/notes.js',
+                async: true
+            }]
+        });
+    </script>
+</body>
+
+</html>
